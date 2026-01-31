@@ -1,0 +1,29 @@
+{
+  "dataset": "sklearn.datasets.load_wine",
+  "model_type": "RandomForestClassifier",
+  "n_features": 13,
+  "feature_names": [
+    "alcohol",
+    "malic_acid",
+    "ash",
+    "alcalinity_of_ash",
+    "magnesium",
+    "total_phenols",
+    "flavanoids",
+    "nonflavanoid_phenols",
+    "proanthocyanins",
+    "color_intensity",
+    "hue",
+    "od280/od315_of_diluted_wines",
+    "proline"
+  ],
+  "target_names": [
+    "class_0",
+    "class_1",
+    "class_2"
+  ],
+  "test_accuracy": 1.0,
+  "trained_at_utc": "2026-01-31T14:50:11.836331+00:00",
+  "sklearn_version": "1.5.1",
+  "artifact": "wine_model.pkl"
+}

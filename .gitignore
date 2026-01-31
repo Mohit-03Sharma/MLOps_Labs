@@ -1,0 +1,61 @@
+# ======================================
+# Python bytecode / cache (all levels)
+# ======================================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ======================================
+# Virtual environments (ANY folder depth)
+# ======================================
+venv/
+.venv/
+env/
+ENV/
+*/venv/
+*/.venv/
+*/env/
+*/ENV/
+
+# Custom / common venv names
+fastapi_lab_env/
+fastapi_lab1_env/
+mlops_env/
+ds_env/
+
+# ======================================
+# Jupyter / notebooks
+# ======================================
+.ipynb_checkpoints/
+
+# ======================================
+# Logs
+# ======================================
+*.log
+
+# ======================================
+# OS-generated files
+# ======================================
+.DS_Store
+Thumbs.db
+
+# ======================================
+# Editor / IDE configs
+# ======================================
+.vscode/
+.idea/
+
+# ======================================
+# Test / coverage artifacts
+# ======================================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ======================================
+# OPTIONAL: Model artifacts
+# (uncomment if you DON'T want models in Git)
+# ======================================
+# */model/*.pkl
+# */model/*.joblib
+# */model/*.json
