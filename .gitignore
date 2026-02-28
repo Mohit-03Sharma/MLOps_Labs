@@ -56,6 +56,9 @@ htmlcov/
 # OPTIONAL: Model artifacts
 # (uncomment if you DON'T want models in Git)
 # ======================================
-# */model/*.pkl
-# */model/*.joblib
-# */model/*.json
+*/model/*.pkl
+*/model/*.joblib
+*/model/*.jsonAirflow_Labs/working_data/
+Airflow_Labs/logs/
+Airflow_Labs/*.pkl
+"Airflow_Labs/.env" 
