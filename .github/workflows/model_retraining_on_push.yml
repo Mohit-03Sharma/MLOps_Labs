@@ -1,0 +1,61 @@
+name: Model Retraining on Push to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout code 
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Set up Python 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+
+    # Install dependencies 
+    - name: Install dependencies
+      run: pip install -r Github_Labs/requirements.txt
+
+    # Generate timestamp 
+    - name: Generate Timestamp
+      id: timestamp
+      run: |
+        timestamp=$(date '+%Y%m%d%H%M%S')
+        echo "timestamp=$timestamp" >> $GITHUB_ENV
+        echo "Generated timestamp: $timestamp"
+
+    # Train model 
+    - name: Train Model
+      working-directory: Github_Labs
+      run: |
+        python src/train_model.py --timestamp "${{ env.timestamp }}"
+
+    # Evaluate model 
+    - name: Evaluate Model
+      working-directory: Github_Labs
+      run: |
+        python src/evaluate_model.py --timestamp "${{ env.timestamp }}"
+
+    # Commit and push model + metrics 
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git add -f Github_Labs/models/ Github_Labs/metrics/ Github_Labs/data/
+        if ! git diff --cached --quiet; then
+          git commit -m "Auto: retrained GBC model and metrics [${{ env.timestamp }}]"
+          git push
+        else
+          echo "No changes to commit."
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

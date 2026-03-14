@@ -1,0 +1,61 @@
+name: Model Calibration on Push to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+    needs: []  # Runs independently; retraining workflow handles model saving first
+
+    steps:
+    # Checkout code 
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Set up Python 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+
+    # Install dependencies 
+    - name: Install dependencies
+      run: pip install -r Github_Labs/requirements.txt
+
+    # Generate timestamp (must match retraining workflow) 
+    - name: Generate Timestamp
+      id: timestamp
+      run: |
+        timestamp=$(date '+%Y%m%d%H%M%S')
+        echo "timestamp=$timestamp" >> $GITHUB_ENV
+        echo "Generated timestamp: $timestamp"
+
+    # Train base model first (calibration needs a model to calibrate) 
+    - name: Train Base Model
+      working-directory: Github_Labs
+      run: |
+        python src/train_model.py --timestamp "${{ env.timestamp }}"
+
+    # Calibrate model 
+    - name: Calibrate Model
+      working-directory: Github_Labs
+      run: |
+        python src/calibrate_model.py --timestamp "${{ env.timestamp }}"
+
+    # Commit and push calibrated model 
+    - name: Commit and Push Calibrated Model
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git add -f Github_Labs/models/ Github_Labs/data/
+        if ! git diff --cached --quiet; then
+          git commit -m "Auto: calibrated GBC model [${{ env.timestamp }}]"
+          git push
+        else
+          echo "No changes to commit."
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
