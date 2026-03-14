@@ -14,7 +14,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Set up Python 
+    # Set up Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -38,7 +38,7 @@ jobs:
       run: |
         python src/train_model.py --timestamp "${{ env.timestamp }}"
 
-    # Evaluate model 
+    # Evaluate model
     - name: Evaluate Model
       working-directory: Github_Labs
       run: |
@@ -48,8 +48,8 @@ jobs:
     - name: Commit and Push Changes
       run: |
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git add -f Github_Labs/models/ Github_Labs/metrics/ Github_Labs/data/
         if ! git diff --cached --quiet; then
           git commit -m "Auto: retrained GBC model and metrics [${{ env.timestamp }}]"
@@ -57,5 +57,3 @@ jobs:
         else
           echo "No changes to commit."
         fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

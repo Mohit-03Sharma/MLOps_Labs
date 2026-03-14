@@ -21,7 +21,7 @@ jobs:
       with:
         python-version: "3.9"
 
-    # Install dependencies 
+    # Install dependencies
     - name: Install dependencies
       run: pip install -r Github_Labs/requirements.txt
 
@@ -39,7 +39,7 @@ jobs:
       run: |
         python src/train_model.py --timestamp "${{ env.timestamp }}"
 
-    # Calibrate model 
+    # Calibrate model
     - name: Calibrate Model
       working-directory: Github_Labs
       run: |
@@ -50,6 +50,7 @@ jobs:
       run: |
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git add -f Github_Labs/models/ Github_Labs/data/
         if ! git diff --cached --quiet; then
           git commit -m "Auto: calibrated GBC model [${{ env.timestamp }}]"
@@ -57,5 +58,3 @@ jobs:
         else
           echo "No changes to commit."
         fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
