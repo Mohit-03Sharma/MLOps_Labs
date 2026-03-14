@@ -21,11 +21,11 @@ jobs:
       with:
         python-version: "3.9"
 
-    # Install dependencies
+    # Install dependencies 
     - name: Install dependencies
       run: pip install -r Github_Labs/requirements.txt
 
-    # Generate timestamp (must match retraining workflow) 
+    # Generate timestamp 
     - name: Generate Timestamp
       id: timestamp
       run: |
@@ -39,7 +39,7 @@ jobs:
       run: |
         python src/train_model.py --timestamp "${{ env.timestamp }}"
 
-    # Calibrate model
+    # Calibrate model 
     - name: Calibrate Model
       working-directory: Github_Labs
       run: |
@@ -54,6 +54,7 @@ jobs:
         git add -f Github_Labs/models/ Github_Labs/data/
         if ! git diff --cached --quiet; then
           git commit -m "Auto: calibrated GBC model [${{ env.timestamp }}]"
+          git pull --rebase origin main
           git push
         else
           echo "No changes to commit."
