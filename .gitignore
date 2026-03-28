@@ -61,4 +61,5 @@ htmlcov/
 */model/*.jsonAirflow_Labs/working_data/
 Airflow_Labs/logs/
 Airflow_Labs/*.pkl
-"Airflow_Labs/.env" 
+Airflow_Labs/.env
+Keras_Labs/kt_dir/ 
